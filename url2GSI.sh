@@ -156,7 +156,7 @@ if [[ -f "$PROJECT_DIR/private_utils.sh" ]]; then
     UPLOAD "$PROJECT_DIR/output" ${SRCTYPENAME} ${AB} ${AONLY} "${ORIGINAL_URL}"
 fi
 
-DEBUG=false
+DEBUG=true
 if [ $DEBUG == true ]; then
 echo "AONLY = ${AONLY}"
 echo "AB = ${AB}"
