@@ -257,5 +257,5 @@ if [ "$sourcever" == "9" ]; then
 fi
 $scriptsdir/mkimage.sh $systemdir $outputtype $systemsize $output $useold > $tempdir/mkimage.log
 
-echo "Remove Temp dir"
-rm -rf "$tempdir"
+#echo "Remove Temp dir"
+#rm -rf "$tempdir"
