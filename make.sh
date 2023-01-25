@@ -246,6 +246,9 @@ bytesToHuman() {
 }
 echo "Raw Image Size: $(bytesToHuman $systemsize)" >> "$outputinfo"
 
+echo "Removing input dir"
+rm -rf "$LOCALDIR/input"
+
 echo "Creating Image: $outputimagename"
 # Use ext4fs to make image in P or older!
 if [ "$sourcever" == "9" ]; then
