@@ -140,10 +140,10 @@ case "$sourcever" in
     *"11"*) flag=true ;;
     *"12"*) flag=true ;;
 esac
-if [ "$flag" == "false" ]; then
-    echo "$sourcever is not supported"
-    exit 1
-fi
+#if [ "$flag" == "false" ]; then
+    #echo "$sourcever is not supported"
+    #exit 1
+#fi
 
 # Detect rom folder again
 if [[ ! -d "$romsdir/$sourcever/$romtype" ]]; then
