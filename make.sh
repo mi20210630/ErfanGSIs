@@ -234,6 +234,72 @@ displayid2=$(echo "$displayid" | sed 's/\./\\./g')
 bdisplay=$(grep "$displayid" $systemdir/system/build.prop | sed 's/\./\\./g; s:/:\\/:g; s/\,/\\,/g; s/\ /\\ /g')
 sed -i "s/$bdisplay/$displayid2=Built\.with\.ErfanGSI\.Tools/" $systemdir/system/build.prop
 
+# 为所有rom做selinux通用化处理
+sed -i "/typetransition location_app/d" $systemdir/etc/selinux/plat_sepolicy.cil
+sed -i '/u:object_r:vendor_default_prop:s0/d' $systemdir/etc/selinux/plat_property_contexts
+sed -i '/software.version/d'  $systemdir/etc/selinux/plat_property_contexts
+sed -i 's/sys.usb.config          u:object_r:system_radio_prop:s0//g' $systemdir/etc/selinux/plat_property_contexts
+sed -i 's/ro.build.fingerprint    u:object_r:fingerprint_prop:s0//g' $systemdir/etc/selinux/plat_property_contexts
+
+if [ -e $systemdir/product/etc/selinux/mapping ];then
+  find $systemdir/product/etc/selinux/mapping/ -type f -empty | xargs rm -rf
+  sed -i '/software.version/d'  $systemdir/product/etc/selinux/product_property_contexts
+  sed -i '/vendor/d' $systemdir/product/etc/selinux/product_property_contexts
+  sed -i '/secureboot/d' $systemdir/product/etc/selinux/product_property_contexts
+  sed -i '/persist/d' $systemdir/product/etc/selinux/product_property_contexts
+   ed -i '/oem/d' $systemdir/product/etc/selinux/product_property_contexts
+ fi
+ 
+if [ -e $systemdir/system_ext/etc/selinux/mapping ];then
+  find $systemdir/system_ext/etc/selinux/mapping/ -type f -empty | xargs rm -rf
+  sed -i '/software.version/d'  $systemdir/system_ext/etc/selinux/system_ext_property_contexts
+  sed -i '/vendor/d' $systemdir/system_ext/etc/selinux/system_ext_property_contexts
+  sed -i '/secureboot/d' $systemdir/system_ext/etc/selinux/system_ext_property_contexts
+  sed -i '/persist/d' $systemdir/system_ext/etc/selinux/system_ext_property_contexts
+  sed -i '/oem/d' $systemdir/system_ext/etc/selinux/system_ext_property_contexts
+fi
+  # 为所有rom删除qti_permissions
+find $systemdir -type f -name "qti_permissions.xml" | xargs rm -rf
+
+sed -i '/media.settings.xml/d' $systemdir/build.prop
+find $systemdir -type d -name "firmware" | xargs rm -rf
+find $systemdir -type d -name "avb" | xargs rm -rf
+
+  # 为所有rom删除firmware
+find $systemdir -type d -name "firmware" | xargs rm -rf
+
+  # 为所有rom删除avb
+find $systemdir -type d -name "avb" | xargs rm -rf
+  
+  # 为所有rom删除com.qualcomm.location
+find $systemdir -type d -name "com.qualcomm.location" | xargs rm -rf
+
+  # 为所有rom删除多余文件
+rm -rf ./out/system/verity_key
+rm -rf ./out/system/init.recovery*
+rm -rf $systemdir/recovery-from-boot.*
+
+  # 为所有rom patch system
+cp -frp ./make/system_patch/system/* $systemdir/
+
+  # 为所有rom做phh化处理
+cp -frp ./make/add_phh/system/* $systemdir/
+
+  # 为phh化注册必要selinux上下文
+cat ./make/add_phh_plat_file_contexts/plat_file_contexts >> $systemdir/etc/selinux/plat_file_contexts
+
+rm -rf ./vintf
+mkdir ./vintf
+cp -frp $systemdir/etc/vintf/manifest.xml ./vintf/
+manifest="./vintf/manifest.xml"
+sed -i '/<\/manifest>/d' $manifest
+cat ./make/add_etc_vintf_patch/manifest_common >> $manifest
+cat ./make/add_etc_vintf_patch/manifest_custom >> $manifest
+echo "" >> $manifest
+echo "</manifest>" >> $manifest
+cp -frp $manifest $systemdir/etc/vintf/
+rm -rf ./vintf
+
 # Getting system size and add approximately 5% on it just for free space
 systemsize=`du -sk $systemdir | awk '{$1*=1024;$1=int($1*1.05);printf $1}'`
 bytesToHuman() {
