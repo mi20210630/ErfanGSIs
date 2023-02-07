@@ -209,7 +209,7 @@ fi
 date=`date +%Y%m%d`
 outputname="$romtypename-$outputtype-$sourcever-$date-ErfanGSI"
 outputimagename="$outputname".img
-outputtextname="$outputname".txt
+outputtextname=info.txt
 if [ "$4" == "" ]; then
     echo "Create out dir"
     outdirname="out"
