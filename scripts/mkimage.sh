@@ -21,7 +21,7 @@ fi
 systemdir=$1
 outputtype=$2
 syssize=50331648
-output=$4
+output=50331648
 
 LOCALDIR=`cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd`
 tempdir="$LOCALDIR/../tmp"
