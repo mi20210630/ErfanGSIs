@@ -209,7 +209,7 @@ if [ "$outputtype" == "Aonly" ]; then
 fi
 
 date=`date +%Y%m%d`
-outputname="$romtypename-$outputtype-$sourcever-$date-ErfanGSI"
+outputname="$romtypename-$outputtype-$sourcever-$date-ErfanGSI(mi20210630)"
 outputimagename="$outputname".img
 outputtextname=info.txt
 if [ "$4" == "" ]; then
@@ -320,9 +320,9 @@ echo "Raw Image Size: $(bytesToHuman $systemsize)" >> "$outputinfo"
 
 echo "Creating Image: $outputimagename"
 # Use ext4fs to make image in P or older!
-if [ "$sourcever" == "9" ]; then
-    useold="--old"
-fi
+#if [ "$sourcever" == "9" ]; then
+useold="--old"
+#fi
 $scriptsdir/mkimage.sh $systemdir $outputtype $systemsize $output $useold > $tempdir/mkimage.log
 
 echo "Remove Temp dir"
