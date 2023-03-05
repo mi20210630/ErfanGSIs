@@ -142,11 +142,11 @@ if [ $MOUNTED == false ]; then
 fi
 
 if [ $AB == true ]; then
-   "$PROJECT_DIR"/make.sh "${URL}" "${SRCTYPE}" AB "$PROJECT_DIR/output" ${@} || LEAVE
+   sudo "$PROJECT_DIR"/make.sh "${URL}" "${SRCTYPE}" AB "$PROJECT_DIR/output" ${@} || LEAVE
 fi
 
 if [ $AONLY == true ]; then
-    "$PROJECT_DIR"/make.sh "${URL}" "${SRCTYPE}" Aonly "$PROJECT_DIR/output" ${@} || LEAVE
+   sudo "$PROJECT_DIR"/make.sh "${URL}" "${SRCTYPE}" Aonly "$PROJECT_DIR/output" ${@} || LEAVE
 fi
 
 echo "Porting ${SRCTYPENAME} GSI done on: $PROJECT_DIR/output"
